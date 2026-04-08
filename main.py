@@ -1,17 +1,23 @@
+# main.py
+# Шаг 1: загрузка и подготовка данных
+
 from datasets import load_dataset
 
-# Скачиваю датасет
-dataset = load_dataset("corbt/all-recipes", split="train")
 
-# Оборачиваю каждый рецепт в токены
-def format_recipe(example):
-    text = f"<|startofrecipe|>{example['input']}<|endofrecipe|>"
-    return {"text": text}
+def load_recipes(num_samples=50000):
+    dataset = load_dataset("corbt/all-recipes", split="train")
 
-# Беру 50 000 рецептов
-dataset = dataset.shuffle(seed=42).select(range(50000))
-dataset = dataset.map(format_recipe)
+    def format_recipe(example):
+        text = f"<|startofrecipe|>{example['input']}<|endofrecipe|>"
+        return {"text": text}
 
-# Проверяю результат
-print(dataset)
-print(dataset[0]["text"][:500])
+    dataset = dataset.shuffle(seed=42).select(range(num_samples))
+    dataset = dataset.map(format_recipe)
+
+    return dataset
+
+
+if __name__ == "__main__":
+    dataset = load_recipes()
+    print(dataset)
+    print(dataset[0]["text"][:500])
