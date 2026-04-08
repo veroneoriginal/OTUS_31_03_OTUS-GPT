@@ -4,7 +4,19 @@
 from datasets import load_dataset
 
 
-def load_recipes(num_samples=50000):
+def load_recipes(num_samples=10000):
+    """
+    Загружает датасет рецептов с HuggingFace и подготавливает его для обучения.
+
+    Каждый рецепт оборачивается в специальные токены <|startofrecipe|> и <|endofrecipe|>,
+    чтобы модель понимала, где начинается и заканчивается рецепт.
+
+    Args:
+        num_samples: количество рецептов для выборки (по умолчанию 50 000)
+
+    Returns:
+        Dataset с полем 'text', содержащим отформатированные рецепты
+    """
     dataset = load_dataset("corbt/all-recipes", split="train")
 
     def format_recipe(example):

@@ -5,12 +5,27 @@ from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 
 def setup_model():
+    """
+    Загружает предобученную модель GPT-2 и токенизатор с HuggingFace,
+    добавляет специальные токены для разметки рецептов.
+
+    Добавляемые токены:
+        - <|startofrecipe|> — начало рецепта
+        - <|endofrecipe|> — конец рецепта
+        - <|pad|> — заполнитель для выравнивания батчей
+
+    После добавления токенов словарь модели расширяется,
+    чтобы она могла работать с новыми токенами.
+
+    Returns:
+        tuple: (model, tokenizer) — модель GPT-2 и настроенный токенизатор
+    """
     tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
     model = GPT2LMHeadModel.from_pretrained("gpt2")
 
     special_tokens = {
         "additional_special_tokens": ["<|startofrecipe|>", "<|endofrecipe|>"],
-        "pad_token": "<|pad|>"
+        "pad_token": "<|pad|>",
     }
     tokenizer.add_special_tokens(special_tokens)
     model.resize_token_embeddings(len(tokenizer))

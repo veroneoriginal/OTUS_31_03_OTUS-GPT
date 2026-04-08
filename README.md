@@ -12,9 +12,31 @@ GPU - GTX 1060 6GB
 
 Модель: GPT-2 small
 
-Датасет: RecipeNLG
+Датасет: corbt/all-recipes (HuggingFace)
 
-Инструменты: Python, transformers, peft (для LoRA), bitsandbytes (для квантизации), datasets — всё ставится через pip.
+Инструменты: 
+Python, transformers, datasets
 
 Результат:
-простой веб-интерфейс на Gradio, куда вводишь ингредиенты, а модель генерирует рецепт.
+простой веб-интерфейс на Gradio, куда можно ввести ингредиенты на английском языке,
+а модель генерирует рецепт.
+
+Что было сделано?
+1) Скачала датасет с HuggingFace (2M рецептов, взяла 10 000)
+2) Подготовила данные — добавила специальные токены для разметки
+3) Загрузила предобученную GPT-2 и расширила словарь
+4) Дообучила модель — 3 эпохи, loss упал с 2.67 до 1.72
+5) Сделала веб-интерфейс на Gradio
+
+Итог:
+Вводим: eggs, flour, sugar, apples
+
+
+Получаем рецепт:
+Ingredients:
+- eggs, flour, sugar, apples
+
+Directions:
+- Cut all ingredients into a bowl.
+- Put into greased baking dish.
+- Bake at 350 degrees for 1 hour.
